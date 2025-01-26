@@ -22,6 +22,11 @@ namespace AuroraPAR
         // Glideslope angle (in degrees)
         private readonly double GlideslopeAngle = 3.0; // Default to 3 degrees
         private readonly double RunwayWidth = 6000.0; // in meters
+
+        // Profile and Overhead View parameters
+        private double ProfileViewWidth = 510;
+        private double OverheadViewWidth = 510;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -73,7 +78,7 @@ namespace AuroraPAR
             {
                 X1 = 10,
                 Y1 = 300,
-                X2 = 510,
+                X2 = ProfileViewWidth,
                 Y2 = 300,
                 Stroke = new SolidColorBrush(Color.FromArgb(255, 173, 216, 230)),  // Light Blue
                 StrokeThickness = 3 // Adjust thickness here
@@ -85,7 +90,7 @@ namespace AuroraPAR
             {
                 X1 = 10,
                 Y1 = 300, // Start at runway altitude
-                X2 = 510, // Extend to 10 NM
+                X2 = ProfileViewWidth, // Extend to 10 NM
                 Y2 = 300 - (totalAltitudeDrop * YScale),
                 Stroke = Brushes.Yellow,
                 StrokeThickness = 3 // Make it as thick as the green runway line
@@ -97,9 +102,9 @@ namespace AuroraPAR
             {
                 var markerLine = new Line
                 {
-                    X1 = 10 + (i * 50), // 50 pixels per NM
+                    X1 = 10 + (i * (ProfileViewWidth / 10)), // Scaling for Profile View width
                     Y1 = 300,
-                    X2 = 10 + (i * 50),
+                    X2 = 10 + (i * (ProfileViewWidth / 10)),
                     Y2 = 300 - (totalAltitudeDrop * YScale),
                     Stroke = (i == 5 || i == 10) ? Brushes.Orange : Brushes.Green, // Orange for 5 and 10, Green for others
                     StrokeDashArray = new DoubleCollection { 4, 4 },
@@ -113,22 +118,10 @@ namespace AuroraPAR
                     Foreground = Brushes.White,
                     FontSize = 12
                 };
-                Canvas.SetLeft(markerLabel, 10 + (i * 50) - 10);
+                Canvas.SetLeft(markerLabel, 10 + (i * (ProfileViewWidth / 10)) - 10);
                 Canvas.SetTop(markerLabel, 310);
                 RunwayCanvas.Children.Add(markerLabel);
             }
-
-            // Add a thicker green line at the left end
-            var leftGreenLine = new Line
-            {
-                X1 = 0,
-                Y1 = 290,
-                X2 = 10,
-                Y2 = 290,
-                Stroke = Brushes.Green,
-                StrokeThickness = 6 // Keep it as thick as before
-            };
-            RunwayCanvas.Children.Add(leftGreenLine);
         }
 
         private void DrawOverheadView()
@@ -140,11 +133,7 @@ namespace AuroraPAR
             double runwayWidthPixels = runwayWidthMeters * XScale; // Scaling runway width in pixels
 
             // Ensure that the overhead view has the same width as the profile view
-            double profileViewWidth = 510; // This is the fixed width for the profile view
-            double overheadViewWidth = 510; // Match the overhead view width to the profile view width
-
-            // Scale the runway line width to match the overhead view width, while ensuring it's proportional
-            double scaledRunwayWidth = Math.Min(runwayWidthPixels, overheadViewWidth); // Limit width to the overhead view width
+            double scaledRunwayWidth = Math.Min(runwayWidthPixels, OverheadViewWidth); // Limit width to the overhead view width
 
             // Calculate the vertical height for the green line at the left end (scale based on runway width)
             double greenLineHeightPixels = runwayWidthMeters * YScale; // Convert runway width in meters to pixels for height
@@ -188,14 +177,15 @@ namespace AuroraPAR
             }
 
             // Add a thicker green line at the left end (vertical height based on runway width)
+            // Add a thicker green line at the left end (vertical height based on runway width)
             var leftGreenLine = new Line
             {
-                X1 = 0,
-                Y1 = 490,
-                X2 = 10,
-                Y2 = 490 - greenLineHeightPixels, // Vertical line length based on runway width
+                X1 = 10,  // Keep X constant to make the line vertical
+                Y1 = 490, // Start position at the bottom of the canvas
+                X2 = 10,  // Same X position, ensuring the line is vertical
+                Y2 = 490 - greenLineHeightPixels,  // Vertical length based on runway width
                 Stroke = Brushes.Green,
-                StrokeThickness = 6 // Make it as thick as the profile view's green line
+                StrokeThickness = 6  // Make it as thick as the profile view's green line
             };
             RunwayCanvas.Children.Add(leftGreenLine);
         }
