@@ -9,8 +9,10 @@ namespace AuroraPAR
     public partial class MainWindow : Window
     {
         // Scaling factors for the canvas
-        private const double XScale = 50.0; // Pixels per NM
-        private const double YScale = 0.01; // Pixels per foot
+        private const double XProfileScale = 50.0; // Pixels per NM for Profile View
+        private const double YProfileScale = 0.03; // Pixels per foot for Profile View
+        private const double XOverheadScale = 70.0; // Pixels per NM for Overhead View
+        private const double YOverheadScale = 0.5; // Pixels per meter for Overhead View
 
         // Runway details
         private readonly double RunwayLat = 40.776927;
@@ -21,17 +23,17 @@ namespace AuroraPAR
 
         // Glideslope angle (in degrees)
         private readonly double GlideslopeAngle = 3.0; // Default to 3 degrees
-        private readonly double RunwayWidth = 6000.0; // in meters
+        private readonly double RunwayWidth = 60.0; // in meters
 
         // Profile and Overhead View parameters
-        private double ProfileViewWidth = 510;
-        private double OverheadViewWidth = 510;
+        private double ProfileViewWidth = 710;
+        private double OverheadViewWidth = 710;
 
         public MainWindow()
         {
             InitializeComponent();
             InitializeRunway();
-            UpdateAircraftPosition(40.786, -73.870, 4200.0); // Sample aircraft position
+            UpdateAircraftPosition(40.786, -73.870, 200.0); // Sample aircraft position
         }
 
         // Draw the runway and glideslope on the canvas
@@ -78,20 +80,21 @@ namespace AuroraPAR
             {
                 X1 = 10,
                 Y1 = 300,
-                X2 = ProfileViewWidth,
+                X2 = 10 + (10 * ProfileViewWidth / 10), // Extend to 10 NM
                 Y2 = 300,
                 Stroke = new SolidColorBrush(Color.FromArgb(255, 173, 216, 230)),  // Light Blue
                 StrokeThickness = 3 // Adjust thickness here
             };
             RunwayCanvas.Children.Add(runwayLine);
 
+
             // Draw the glideslope (yellow line)
             var glideslopeLine = new Line
             {
                 X1 = 10,
                 Y1 = 300, // Start at runway altitude
-                X2 = ProfileViewWidth, // Extend to 10 NM
-                Y2 = 300 - (totalAltitudeDrop * YScale),
+                X2 = 10 + (10 * ProfileViewWidth / 10), // Extend to 10 NM (same as the runway line)
+                Y2 = 300 - (totalAltitudeDrop * YProfileScale),
                 Stroke = Brushes.Yellow,
                 StrokeThickness = 3 // Make it as thick as the green runway line
             };
@@ -105,7 +108,7 @@ namespace AuroraPAR
                     X1 = 10 + (i * (ProfileViewWidth / 10)), // Scaling for Profile View width
                     Y1 = 300,
                     X2 = 10 + (i * (ProfileViewWidth / 10)),
-                    Y2 = 300 - (totalAltitudeDrop * YScale),
+                    Y2 = 300 - (totalAltitudeDrop * YProfileScale),
                     Stroke = (i == 5 || i == 10) ? Brushes.Orange : Brushes.Green, // Orange for 5 and 10, Green for others
                     StrokeDashArray = new DoubleCollection { 4, 4 },
                     StrokeThickness = 1
@@ -130,13 +133,13 @@ namespace AuroraPAR
             double runwayWidthMeters = RunwayWidth;
 
             // Calculate the runway width in pixels based on XScale
-            double runwayWidthPixels = runwayWidthMeters * XScale; // Scaling runway width in pixels
+            double runwayWidthPixels = runwayWidthMeters * XOverheadScale; // Scaling runway width in pixels
 
             // Ensure that the overhead view has the same width as the profile view
             double scaledRunwayWidth = Math.Min(runwayWidthPixels, OverheadViewWidth); // Limit width to the overhead view width
 
             // Calculate the vertical height for the green line at the left end (scale based on runway width)
-            double greenLineHeightPixels = runwayWidthMeters * YScale; // Convert runway width in meters to pixels for height
+            double greenLineHeightPixels = runwayWidthMeters * YOverheadScale; // Convert runway width in meters to pixels for height
 
             // Draw the runway line (horizontal) in the overhead view with yellow
             var runwayLine = new Line
@@ -177,7 +180,6 @@ namespace AuroraPAR
             }
 
             // Add a thicker green line at the left end (vertical height based on runway width)
-            // Add a thicker green line at the left end (vertical height based on runway width)
             var leftGreenLine = new Line
             {
                 X1 = 10,  // Keep X constant to make the line vertical
@@ -185,7 +187,7 @@ namespace AuroraPAR
                 X2 = 10,  // Same X position, ensuring the line is vertical
                 Y2 = 490 - greenLineHeightPixels,  // Vertical length based on runway width
                 Stroke = Brushes.Green,
-                StrokeThickness = 6  // Make it as thick as the profile view's green line
+                StrokeThickness = 3  // Make it as thick as the profile view's green line
             };
             RunwayCanvas.Children.Add(leftGreenLine);
         }
@@ -202,7 +204,7 @@ namespace AuroraPAR
                 aircraftLat, aircraftLon, aircraftAlt,
                 RunwayLat, RunwayLon, RunwayAlt,
                 MagneticHeading, MagneticDeclination,
-                XScale, YScale
+                XProfileScale, YProfileScale
             );
             y = 300 - y; // Adjust for canvas inversion
 
