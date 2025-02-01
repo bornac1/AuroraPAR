@@ -72,4 +72,14 @@ namespace AuroraPAR
         }
 
     }
+    internal struct Distance(double distance)
+    {
+        double distance = distance;
+        public static implicit operator double(Distance d) => d.distance;
+        public static implicit operator Distance(int distance) => new Distance(distance);
+        public override string ToString()
+        {
+            return $"{distance} nm";
+        }
+    }
 }

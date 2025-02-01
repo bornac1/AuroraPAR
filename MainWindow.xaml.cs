@@ -10,6 +10,7 @@ namespace AuroraPAR
         private int qnh = 1024;
         private readonly System.Timers.Timer timer;
         private readonly ProfileView profileView;
+        private readonly Distance[] distances = new Distance[] {5, 10, 15, 20};
         private Runway runway = new()
         {
             Designator = "05",
@@ -22,13 +23,19 @@ namespace AuroraPAR
         public MainWindow()
         {
             InitializeComponent();
+            DistanceComboBox.ItemsSource = distances;
+            DistanceComboBox.SelectedIndex = 1;//10 nm
+            DistanceComboBox.SelectionChanged += DistanceComboBox_SelectionChanged;
             profileView = new(Vertical, runway);
             timer = new();
             timer.Start();
             timer.Interval = 100;
             timer.Elapsed += Timer_Elapsed;
         }
-
+        private void DistanceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            runway.Distance = (Distance)e.AddedItems[0];
+        }
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             Draw();
