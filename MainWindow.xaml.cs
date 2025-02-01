@@ -7,14 +7,22 @@ namespace AuroraPAR
 {
     public partial class MainWindow : Window
     {
-        private int runway = 5;
         private int qnh = 1024;
-        private System.Timers.Timer timer;
-        private ProfileView profileView;
+        private readonly System.Timers.Timer timer;
+        private readonly ProfileView profileView;
+        private Runway runway = new()
+        {
+            Designator = "05",
+            Elevation = 0,
+            Latitude = 0,
+            Longitude = 0,
+            LengthM = 1000,
+            Distance = 10
+        };
         public MainWindow()
         {
             InitializeComponent();
-            profileView = new(Vertical);
+            profileView = new(Vertical, runway);
             timer = new();
             timer.Start();
             timer.Interval = 100;
@@ -32,14 +40,26 @@ namespace AuroraPAR
             {
                 Vertical.Children.Clear();
                 DrawInfo();
-                profileView.Draw();
+                Aircraft aircraft1 = new()
+                {
+                    Latitude = 0.1,
+                    Longitude = 0,
+                    Altitde = 2000
+                };
+                Aircraft aircraft2 = new()
+                {
+                    Latitude = 0.15,
+                    Longitude = 0,
+                    Altitde = 3200
+                };
+                profileView.Draw([aircraft1, aircraft2]);
             });
         }
         private void DrawInfo()
         {
             TextBlock info = new()
             {
-                Text = $"RWY {runway}\nQNH {qnh}",
+                Text = $"RWY {runway.Designator}\nQNH {qnh}",
                 FontSize = 14,
                 Foreground = Brushes.White
             };

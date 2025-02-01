@@ -7,7 +7,6 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <Canvas Name="Vertical" Grid.Row="0" Background="Black"/>
         <Canvas Name="Horizontal" Grid.Row="1" Background="Black"/>
     </Grid>
