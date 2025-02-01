@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AuroraPAR
+{
+    internal class Runway
+    {
+        public string ICAO { get; set; } = "ZZZZ";
+        public string Designator { get; set; } = "00";
+        /// <summary>
+        /// Heading in deg.
+        /// </summary>
+        public double Heading { get; set; } = 0;
+        /// <summary>
+        /// Elevation in ft.
+        /// </summary>
+        public double Elevation { get; set; } = 0;
+        /// <summary>
+        /// Plus is north.
+        /// </summary>
+        public double Latitude { get; set; }
+        /// <summary>
+        /// Plus is east.
+        /// </summary>
+        public double Longitude { get; set; }
+        private double _length = 0;
+        /// <summary>
+        /// Length in meters.
+        /// </summary>
+        public double LengthM { get { return _length; } set { _length = value; } }
+        /// <summary>
+        /// Length in nautical miles.
+        /// </summary>
+        public double LengthNM { get { return LengthM / 1852; } set { _length = value / 1852; } }
+        /// <summary>
+        /// Glide slope angle in degrees.
+        /// </summary>
+        public double GlideSlope { get; set; } = 3.0;
+        /// <summary>
+        /// Distance from the runway to be displayed in NM.
+        /// </summary>
+        public double Distance { get; set; } = 10.0;
+    }
+    internal class Aircraft
+    {
+        public string Callsign { get; set; } = "ABC1234";
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Altitde { get; set; } = 0;
+        /// <summary>
+        /// Distance to runway.
+        /// </summary>
+        /// <param name="runway">Runway.</param>
+        /// <returns>Distance in NM.</returns>
+        public double Distance(Runway runway)
+        {
+            double lat1Rad = Latitude*double.Pi/180;
+            double lon1Rad = Longitude * double.Pi / 180;
+            double lat2Rad = runway.Latitude * double.Pi / 180;
+            double lon2Rad = runway.Longitude*double.Pi/180;
+            double dLat = lat2Rad - lat1Rad;
+            double dLon = lon2Rad - lon1Rad;
+            // Haversine formula
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(lat1Rad) * Math.Cos(lat2Rad) *
+                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return (c * 6371 * 1000 / 1852);
+        }
+
+    }
+}

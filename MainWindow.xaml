@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Aurora PAR" Height="600" Width="800">
     <Grid>
-        <!-- Canvas for drawing the runway, glideslope, and aircraft -->
-        <Canvas Name="RunwayCanvas" Background="Black" Margin="10">
-            <!-- Labels for runway and status -->
-            <TextBlock Name="RunwayLabel" Foreground="White" FontSize="14" Margin="10,10,0,0" />
-            <TextBlock Name="AircraftStatusLabel" Foreground="White" FontSize="14" Margin="10,30,0,0" />
-        </Canvas>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Canvas Name="Vertical" Grid.Row="0" Background="Black"/>
+        <Canvas Name="Horizontal" Grid.Row="1" Background="Black"/>
     </Grid>
 </Window>
