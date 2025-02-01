@@ -15,19 +15,21 @@ namespace AuroraPAR
         private readonly Distance[] distances = new Distance[] {5, 10, 15, 20};
         private Runway runway = new()
         {
+            ICAO = "EDDF",
             Designator = "TEST",
             Elevation = 364,
-            Latitude = 50.02889269570808,
-            Longitude = 8.525418829725337,
+            Heading = 70,
+            Latitude = 50.02766757167606,
+            Longitude = 8.534360261721835,
             LengthM = 1000,
             WidthM = 60,
-            Distance = 5
+            Distance = 10
         };
         public MainWindow()
         {
             InitializeComponent();
             DistanceComboBox.ItemsSource = distances;
-            //DistanceComboBox.SelectedIndex = 1;//10 nm
+            DistanceComboBox.SelectedIndex = 1;//10 nm
             DistanceComboBox.SelectionChanged += DistanceComboBox_SelectionChanged;
             profileView = new(Vertical, runway);
             horizontalView = new(Horizontal, runway);
@@ -56,6 +58,10 @@ namespace AuroraPAR
         private async void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             string[] callsigns = await aurora.GetTrafficList();
+            int nqnh = await aurora.GetQNH(runway);
+            if (nqnh != 0) {
+                qnh = nqnh;
+            }
             List<Aircraft> aircrafts = [];
             foreach(string callsign in callsigns)
             {

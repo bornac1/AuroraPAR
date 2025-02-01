@@ -8,6 +8,8 @@ using System.Net;
 using System.Data;
 using System.IO;
 using System.Windows;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace AuroraPAR
 {
@@ -17,6 +19,7 @@ namespace AuroraPAR
         private NetworkStream? stream;
         private StreamReader? reader;
         private StreamWriter? writer;
+        private SemaphoreSlim semaphore = new(1, 1);
         public async Task Connect()
         {
             await client.ConnectAsync(IPAddress.Parse("127.0.0.1"), 1130);
@@ -29,9 +32,11 @@ namespace AuroraPAR
         {
             if (writer != null && reader != null && client.Connected)
             {
+                await semaphore.WaitAsync();
                 await writer.WriteLineAsync("#TR");
                 await writer.FlushAsync();
                 string? message = await reader.ReadLineAsync();
+                semaphore.Release();
                 if (message != null)
                 {
                     string[] callsigns = message.Split(';')[1..];
@@ -44,9 +49,11 @@ namespace AuroraPAR
         {
             if (reader != null && writer != null && client.Connected && !string.IsNullOrEmpty(callsign))
             {
+                await semaphore.WaitAsync();
                 await writer.WriteLineAsync($"#TRPOS;{callsign}");
                 await writer.FlushAsync();
                 string? message = await reader.ReadLineAsync();
+                semaphore.Release();
                 if (message != null && message.Contains("#TRPOS"))
                 {
                     string[] data = message.Split(';');
@@ -64,6 +71,27 @@ namespace AuroraPAR
                 }
             }
             return null;
+        }
+        public async Task<int> GetQNH(Runway runway)
+        {
+            if(reader != null && writer != null)
+            {
+                await semaphore.WaitAsync();
+                await writer.WriteLineAsync($"#METAR;{runway.ICAO}");
+                await writer.FlushAsync();
+                string? message = await reader.ReadLineAsync();
+                semaphore.Release();
+                if(message != null)
+                {
+                    Regex rg = new Regex("Q\\d{4}");
+                    Match match = rg.Match(message);
+                    if (match.Length > 1)
+                    {
+                        return Convert.ToInt32(match.Value[1..]);
+                    }
+                }
+            }
+            return 0;
         }
         public void Close()
         {

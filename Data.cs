@@ -80,7 +80,25 @@ namespace AuroraPAR
             double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
             return (c * 6371 * 1000 / 1852);
         }
+        public double LateralOffset(Runway runway)
+        {
+            double lat1Rad = Latitude * Math.PI / 180;
+            double lon1Rad = Longitude * Math.PI / 180;
+            double lat2Rad = runway.Latitude * Math.PI / 180;
+            double lon2Rad = runway.Longitude * Math.PI / 180;
 
+            // Calculate initial bearing from runway to aircraft
+            double dLon = lon1Rad - lon2Rad;
+            double y = Math.Sin(dLon) * Math.Cos(lat1Rad);
+            double x = Math.Cos(lat2Rad) * Math.Sin(lat1Rad) - Math.Sin(lat2Rad) * Math.Cos(lat1Rad) * Math.Cos(dLon);
+            double bearingToAircraft = Math.Atan2(y, x) * (180 / Math.PI); // Convert to degrees
+
+            // Calculate lateral offset relative to runway heading
+            double bearingDifference = (bearingToAircraft - runway.Heading + 360) % 360;
+            double lateralOffsetNM = Distance(runway) * Math.Sin(bearingDifference * Math.PI / 180);
+
+            return lateralOffsetNM;
+        }
     }
     internal struct Distance(double distance)
     {

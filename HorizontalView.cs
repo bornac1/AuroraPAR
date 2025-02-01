@@ -78,6 +78,32 @@ namespace AuroraPAR
                 StrokeThickness = 2
             };
             canvas.Children.Add(axis);
+            foreach (Aircraft aircraft in aircrafts)
+            {
+                DrawAircraft(aircraft);
+            }
+        }
+        private void DrawAircraft(Aircraft aircraft)
+        {
+            Ellipse elipse = new()
+            {
+                Height = 10,
+                Width = 10,
+                Stroke = Brushes.White,
+                Fill = Brushes.White
+            };
+            Canvas.SetTop(elipse, (canvas.ActualHeight / 2)-aircraft.LateralOffset(_runway)*yscale);
+            Canvas.SetLeft(elipse, (aircraft.Distance(_runway) + _runway.LengthNM) * xscale);
+            canvas.Children.Add(elipse);
+            TextBlock textBlock = new()
+            {
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
+                FontSize = 12,
+                Foreground = Brushes.White
+            };
+            Canvas.SetTop(textBlock, (canvas.ActualHeight / 2)-(aircraft.LateralOffset(runway) * yscale + 35));
+            Canvas.SetLeft(textBlock, ((aircraft.Distance(_runway) + _runway.LengthNM) * xscale) - 10);
+            canvas.Children.Add(textBlock);
         }
     }
 }
