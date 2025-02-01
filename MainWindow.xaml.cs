@@ -10,56 +10,85 @@ namespace AuroraPAR
         private int qnh = 1024;
         private readonly System.Timers.Timer timer;
         private readonly ProfileView profileView;
+        private readonly HorizontalView horizontalView;
+        private readonly Aurora aurora;
         private readonly Distance[] distances = new Distance[] {5, 10, 15, 20};
         private Runway runway = new()
         {
-            Designator = "05",
-            Elevation = 0,
-            Latitude = 0,
-            Longitude = 0,
+            Designator = "TEST",
+            Elevation = 364,
+            Latitude = 50.02889269570808,
+            Longitude = 8.525418829725337,
             LengthM = 1000,
-            Distance = 10
+            WidthM = 60,
+            Distance = 5
         };
         public MainWindow()
         {
             InitializeComponent();
             DistanceComboBox.ItemsSource = distances;
-            DistanceComboBox.SelectedIndex = 1;//10 nm
+            //DistanceComboBox.SelectedIndex = 1;//10 nm
             DistanceComboBox.SelectionChanged += DistanceComboBox_SelectionChanged;
             profileView = new(Vertical, runway);
+            horizontalView = new(Horizontal, runway);
+            aurora = new();
+            this.Loaded += MainWindow_Loaded;
+            this.Closing += MainWindow_Closing;
             timer = new();
             timer.Start();
             timer.Interval = 100;
             timer.Elapsed += Timer_Elapsed;
         }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            aurora.Close();
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            await aurora.Connect();
+        }
         private void DistanceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             runway.Distance = (Distance)e.AddedItems[0];
         }
-        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private async void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Draw();
+            string[] callsigns = await aurora.GetTrafficList();
+            List<Aircraft> aircrafts = [];
+            foreach(string callsign in callsigns)
+            {
+                Aircraft? aircraft = await aurora.GetTrafficPosition(callsign);
+                if(aircraft != null)
+                {
+                    aircrafts.Add(aircraft);
+                }
+            }
+            Draw(aircrafts);
             timer.Start();
         }
-        private void Draw()
+        private void Draw(List<Aircraft> aircrafts)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
                 Vertical.Children.Clear();
+                Horizontal.Children.Clear();
                 DrawInfo();
-                Aircraft aircraft1 = new()
+                /*Aircraft aircraft1 = new()
                 {
                     Latitude = 0.1,
                     Longitude = 0,
-                    Altitde = 2000
+                    Altitude = 2000
                 };
                 Aircraft aircraft2 = new()
                 {
                     Latitude = 0.15,
                     Longitude = 0,
-                    Altitde = 3200
-                };
-                profileView.Draw([aircraft1, aircraft2]);
+                    Altitude = 3200
+                };*/
+                profileView.Draw(aircrafts);
+                horizontalView.Draw(aircrafts);
             });
         }
         private void DrawInfo()

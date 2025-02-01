@@ -43,13 +43,23 @@ namespace AuroraPAR
         /// Distance from the runway to be displayed in NM.
         /// </summary>
         public double Distance { get; set; } = 10.0;
+        private double _width = 0;
+        /// <summary>
+        /// Width in meters.
+        /// </summary>
+        public double WidthM { get { return _width; } set { _width = value; } }
+        /// <summary>
+        /// Width in nautical miles.
+        /// </summary>
+        public double WidthNM { get { return WidthM / 1852; } set { _width = value / 1852; } }
+
     }
     internal class Aircraft
     {
         public string Callsign { get; set; } = "ABC1234";
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double Altitde { get; set; } = 0;
+        public double Altitude { get; set; } = 0;
         /// <summary>
         /// Distance to runway.
         /// </summary>

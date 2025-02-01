@@ -34,16 +34,16 @@ namespace AuroraPAR
                 Stroke = Brushes.White,
                 Fill = Brushes.White
             };
-            Canvas.SetBottom(elipse, aircraft.Altitde * yscale);
+            Canvas.SetBottom(elipse, aircraft.Altitude * yscale);
             Canvas.SetLeft(elipse, (aircraft.Distance(_runway) + _runway.LengthNM) * xscale);
             canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitde}",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
-            Canvas.SetBottom(textBlock, (aircraft.Altitde * yscale + 15));
+            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 15));
             Canvas.SetLeft(textBlock, ((aircraft.Distance(_runway) + _runway.LengthNM) * xscale)-10);
             canvas.Children.Add(textBlock);
         }
