@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace AuroraPAR
 {
@@ -52,6 +53,11 @@ namespace AuroraPAR
         /// Width in nautical miles.
         /// </summary>
         public double WidthNM { get { return WidthM / 1852; } set { _width = value / 1852; } }
+
+        public override string ToString()
+        {
+            return $"{ICAO} {Designator}";
+        }
 
     }
     internal class Aircraft
@@ -108,6 +114,37 @@ namespace AuroraPAR
         public override string ToString()
         {
             return $"{distance} nm";
+        }
+    }
+
+    internal class DataFile
+    {
+        //Format: ICAO;DESIGNATOR;HEADING;ELEVATION;LATITUDE;LONGITUDE;LENGTH IN METERS;WIDTH IN METERS;GLIDE SLOPE;DEFAULT DISTANCE
+        public static async Task<Runway[]> GetRunways(string path)
+        {
+            List<Runway> runways = [];
+            string[] data = await System.IO.File.ReadAllLinesAsync(path);
+            foreach (string line in data)
+            {
+                string[] linedata = line.Replace('.', ',').Split(';');
+                if (linedata.Length > 9)
+                {
+                    runways.Add(new()
+                    {
+                        ICAO = linedata[0],
+                        Designator = linedata[1],
+                        Heading = Double.Parse(linedata[2]),
+                        Elevation = Double.Parse(linedata[3]),
+                        Latitude = Double.Parse(linedata[4]),
+                        Longitude = Double.Parse(linedata[5]),
+                        LengthM = Double.Parse(linedata[6]),
+                        WidthM = Double.Parse(linedata[7]),
+                        GlideSlope = Double.Parse(linedata[8]),
+                        Distance = Double.Parse(linedata[9])
+                    });
+                }
+            }
+            return runways.ToArray();
         }
     }
 }

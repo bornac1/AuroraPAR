@@ -7,12 +7,13 @@ namespace AuroraPAR
 {
     public partial class MainWindow : Window
     {
-        private int qnh = 1024;
+        private int qnh = 0;
         private readonly System.Timers.Timer timer;
-        private readonly ProfileView profileView;
-        private readonly HorizontalView horizontalView;
+        private ProfileView profileView;
+        private HorizontalView horizontalView;
         private readonly Aurora aurora;
         private readonly Distance[] distances = new Distance[] {5, 10, 15, 20};
+        private string dataPath = "runways.par";
         private Runway runway = new()
         {
             ICAO = "EDDF",
@@ -28,6 +29,7 @@ namespace AuroraPAR
         public MainWindow()
         {
             InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
             DistanceComboBox.ItemsSource = distances;
             DistanceComboBox.SelectedIndex = 1;//10 nm
             DistanceComboBox.SelectionChanged += DistanceComboBox_SelectionChanged;
@@ -49,11 +51,27 @@ namespace AuroraPAR
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            RunwayComboBox.ItemsSource = await DataFile.GetRunways(dataPath);
+            RunwayComboBox.SelectionChanged += RunwayComboBox_SelectionChanged;
             await aurora.Connect();
         }
+
+        private void RunwayComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems[0] is Runway r)
+            {
+                runway = r;
+                profileView = new(Vertical, runway);
+                horizontalView = new(Horizontal, runway);
+            }
+        }
+
         private void DistanceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            runway.Distance = (Distance)e.AddedItems[0];
+            if (e.AddedItems[0] is Distance d)
+            {
+                runway.Distance = d;
+            }
         }
         private async void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
@@ -81,18 +99,6 @@ namespace AuroraPAR
                 Vertical.Children.Clear();
                 Horizontal.Children.Clear();
                 DrawInfo();
-                /*Aircraft aircraft1 = new()
-                {
-                    Latitude = 0.1,
-                    Longitude = 0,
-                    Altitude = 2000
-                };
-                Aircraft aircraft2 = new()
-                {
-                    Latitude = 0.15,
-                    Longitude = 0,
-                    Altitude = 3200
-                };*/
                 profileView.Draw(aircrafts);
                 horizontalView.Draw(aircrafts);
             });

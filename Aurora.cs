@@ -22,11 +22,17 @@ namespace AuroraPAR
         private SemaphoreSlim semaphore = new(1, 1);
         public async Task Connect()
         {
-            await client.ConnectAsync(IPAddress.Parse("127.0.0.1"), 1130);
-            stream = client.GetStream();
-            reader = new(stream);
-            writer = new(stream);
-            await GetTrafficList();
+            try
+            {
+                await client.ConnectAsync(IPAddress.Parse("127.0.0.1"), 1130);
+                stream = client.GetStream();
+                reader = new(stream);
+                writer = new(stream);
+                await GetTrafficList();
+            } catch (Exception ex)
+            {
+                //TODO: Exception handling
+            }
         }
         public async Task<string[]> GetTrafficList()
         {

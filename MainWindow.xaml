@@ -20,7 +20,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.Row="0" Name="DistanceComboBox"></ComboBox>
+            <ComboBox Grid.Row="0" Name="RunwayComboBox"></ComboBox>
+            <ComboBox Grid.Row="1" Name="DistanceComboBox"></ComboBox>
         </Grid>
     </Grid>
 </Window>
