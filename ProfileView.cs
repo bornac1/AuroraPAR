@@ -152,7 +152,10 @@ namespace AuroraPAR
             }
             foreach (Aircraft aircraft in aircrafts)
             {
-                DrawAircraft(aircraft);
+                if (aircraft.IsDisplayed(runway))
+                {
+                    DrawAircraft(aircraft);
+                }
             }
         }
     }

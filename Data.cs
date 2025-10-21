@@ -88,22 +88,38 @@ namespace AuroraPAR
         }
         public double LateralOffset(Runway runway)
         {
-            double lat1Rad = Latitude * Math.PI / 180;
-            double lon1Rad = Longitude * Math.PI / 180;
-            double lat2Rad = runway.Latitude * Math.PI / 180;
-            double lon2Rad = runway.Longitude * Math.PI / 180;
-
             // Calculate initial bearing from runway to aircraft
-            double dLon = lon1Rad - lon2Rad;
-            double y = Math.Sin(dLon) * Math.Cos(lat1Rad);
-            double x = Math.Cos(lat2Rad) * Math.Sin(lat1Rad) - Math.Sin(lat2Rad) * Math.Cos(lat1Rad) * Math.Cos(dLon);
-            double bearingToAircraft = Math.Atan2(y, x) * (180 / Math.PI); // Convert to degrees
+            double bearingToAircraft = BearingFromRunway(runway);
 
             // Calculate lateral offset relative to runway heading
             double bearingDifference = (bearingToAircraft - runway.Heading + 360) % 360;
             double lateralOffsetNM = Distance(runway) * Math.Sin(bearingDifference * Math.PI / 180);
 
             return lateralOffsetNM;
+        }
+        public double BearingFromRunway(Runway runway)
+        {
+            double lat1Rad = Latitude * Math.PI / 180;
+            double lon1Rad = Longitude * Math.PI / 180;
+            double lat2Rad = runway.Latitude * Math.PI / 180;
+            double lon2Rad = runway.Longitude * Math.PI / 180;
+
+            double dLon = lon1Rad - lon2Rad;
+            double y = Math.Sin(dLon) * Math.Cos(lat1Rad);
+            double x = Math.Cos(lat2Rad) * Math.Sin(lat1Rad) - Math.Sin(lat2Rad) * Math.Cos(lat1Rad) * Math.Cos(dLon);
+            double bearingToAircraft = Math.Atan2(y, x) * (180 / Math.PI); // Convert to degrees
+            return bearingToAircraft;
+        }
+        public bool IsDisplayed(Runway runway)
+        {
+            double diff = (BearingFromRunway(runway) - runway.Heading + 360) % 360;
+            //Prevent opposite runway
+            if (Math.Abs(diff) >= 90) return false;
+            //Prevent far away aircrafts
+            if (Distance(runway) > runway.Distance) return false;
+            //Prevent aircrafts below runway elevation
+            if (Altitude <= runway.Elevation) return false;
+            return true;
         }
     }
     internal struct Distance(double distance)
