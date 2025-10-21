@@ -31,7 +31,7 @@ namespace AuroraPAR
             Line runwayh = new()
             {
                 X1 = 0,
-                Y1 = canvas.ActualHeight/2,
+                Y1 = canvas.ActualHeight / 2,
                 X2 = _runway.LengthNM * xscale,
                 Y2 = canvas.ActualHeight / 2,
                 Stroke = Brushes.Green,
@@ -41,9 +41,9 @@ namespace AuroraPAR
             Line runwayv = new()
             {
                 X1 = _runway.LengthNM * xscale,
-                Y1 = (canvas.ActualHeight / 2) - (_runway.WidthNM *yscale),
+                Y1 = (canvas.ActualHeight / 2) - (_runway.WidthNM * yscale),
                 X2 = _runway.LengthNM * xscale,
-                Y2 = (canvas.ActualHeight / 2) + (_runway.WidthNM *yscale),
+                Y2 = (canvas.ActualHeight / 2) + (_runway.WidthNM * yscale),
                 Stroke = Brushes.Green,
                 StrokeThickness = 3
             };
@@ -53,7 +53,7 @@ namespace AuroraPAR
                 X1 = 0,
                 Y1 = canvas.ActualHeight / 2,
                 X2 = (_runway.LengthNM + Runway.Distance) * xscale,
-                Y2 = canvas.ActualHeight-(((_runway.LengthNM + _runway.Distance) * Math.Tan((10) * double.Pi / 180)) * yscale),
+                Y2 = canvas.ActualHeight - (((_runway.LengthNM + _runway.Distance) * Math.Tan((10) * double.Pi / 180)) * yscale),
                 Stroke = Brushes.CadetBlue,
                 StrokeThickness = 3
             };
@@ -78,9 +78,27 @@ namespace AuroraPAR
                 StrokeThickness = 2
             };
             canvas.Children.Add(axis);
+            for (int i = 1; i <= 10; i++)
+            {
+                SolidColorBrush stroke = (i % 5 == 0) ? Brushes.Orange : Brushes.Green;
+                double x = (i * _runway.Distance / 10 + _runway.LengthNM) * xscale;
+                Line distance = new()
+                {
+                    X1 = x,
+                    Y1 = canvas.ActualHeight / 2 + (x / ((_runway.LengthNM + _runway.Distance) * xscale) * (((_runway.LengthNM + _runway.Distance) * Math.Tan(10 * Math.PI / 180)) * yscale - canvas.ActualHeight / 2)),
+                    X2 = x,
+                    Y2 = canvas.ActualHeight / 2 + (x / ((_runway.LengthNM + _runway.Distance) * xscale) * (canvas.ActualHeight - (((_runway.LengthNM + _runway.Distance) * Math.Tan(10 * Math.PI / 180)) * yscale) - canvas.ActualHeight / 2)),
+                    Stroke = stroke,
+                    StrokeThickness = 1
+                };
+                canvas.Children.Add(distance);
+            }
             foreach (Aircraft aircraft in aircrafts)
             {
-                DrawAircraft(aircraft);
+                if (aircraft.IsDisplayed(runway))
+                {
+                    DrawAircraft(aircraft);
+                }
             }
         }
         private void DrawAircraft(Aircraft aircraft)
