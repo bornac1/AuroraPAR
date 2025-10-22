@@ -99,14 +99,15 @@ namespace AuroraPAR
         }
         public double BearingFromRunway(Runway runway)
         {
-            double lat1Rad = Latitude * Math.PI / 180;
-            double lon1Rad = Longitude * Math.PI / 180;
-            double lat2Rad = runway.Latitude * Math.PI / 180;
-            double lon2Rad = runway.Longitude * Math.PI / 180;
+            double lat1Rad = runway.Latitude * Math.PI / 180;
+            double lon1Rad = runway.Longitude * Math.PI / 180;
+            double lat2Rad = Latitude * Math.PI / 180;
+            double lon2Rad = Longitude * Math.PI / 180;
 
-            double dLon = lon1Rad - lon2Rad;
-            double y = Math.Sin(dLon) * Math.Cos(lat1Rad);
-            double x = Math.Cos(lat2Rad) * Math.Sin(lat1Rad) - Math.Sin(lat2Rad) * Math.Cos(lat1Rad) * Math.Cos(dLon);
+            double dLon = lon2Rad - lon1Rad;
+            double y = Math.Sin(dLon) * Math.Cos(lat2Rad);
+            double x = Math.Cos(lat1Rad) * Math.Sin(lat2Rad) -
+                       Math.Sin(lat1Rad) * Math.Cos(lat2Rad) * Math.Cos(dLon);
             double bearingToAircraft = Math.Atan2(y, x) * (180 / Math.PI); // Convert to degrees
             return bearingToAircraft;
         }
