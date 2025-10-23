@@ -95,9 +95,20 @@ namespace AuroraPAR
             // Calculate initial bearing from runway to aircraft
             double bearingToAircraft = BearingFromRunway(runway);
 
-            // Calculate lateral offset relative to runway heading
-            double bearingDifference = (bearingToAircraft - runway.Heading + 360) % 360;
-            double lateralOffsetNM = Distance(runway) * Math.Sin(bearingDifference * Math.PI / 180);
+            double R = 6371e3; // Earth radius in meters
+
+            // Angular distance from runway to aircraft (radians)
+            double delta13 = Distance(runway) * 1852 / R; // Distance(runway) returns NM, convert to meters then to radians
+
+            // Bearings in radians
+            double theta13 = bearingToAircraft * Math.PI / 180.0; // runway -> aircraft
+            double theta12 = runway.Heading * Math.PI / 180.0;     // runway heading
+
+            // Cross-track distance formula (meters)
+            double xt = Math.Asin(Math.Sin(delta13) * Math.Sin(theta13 - theta12)) * R;
+
+            // Convert meters back to NM
+            double lateralOffsetNM = xt / 1852.0;
 
             return lateralOffsetNM;
         }
