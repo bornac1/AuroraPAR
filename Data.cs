@@ -41,6 +41,10 @@ namespace AuroraPAR
         /// </summary>
         public double GlideSlope { get; set; } = 3.0;
         /// <summary>
+        /// Threshold crossing height.
+        /// </summary>
+        public double TCH { get; set; } = 50;
+        /// <summary>
         /// Distance from the runway to be displayed in NM.
         /// </summary>
         public double Distance { get; set; } = 10.0;
@@ -136,7 +140,7 @@ namespace AuroraPAR
 
     internal class DataFile
     {
-        //Format: ICAO;DESIGNATOR;HEADING;ELEVATION;LATITUDE;LONGITUDE;LENGTH IN METERS;WIDTH IN METERS;GLIDE SLOPE;DEFAULT DISTANCE
+        //Format: ICAO;DESIGNATOR;HEADING;ELEVATION;LATITUDE;LONGITUDE;LENGTH IN METERS;WIDTH IN METERS;GLIDE SLOPE;TCH;DEFAULT DISTANCE
         public static async Task<Runway[]> GetRunways(string path)
         {
             List<Runway> runways = [];
@@ -157,7 +161,8 @@ namespace AuroraPAR
                         LengthM = Double.Parse(linedata[6]),
                         WidthM = Double.Parse(linedata[7]),
                         GlideSlope = Double.Parse(linedata[8]),
-                        Distance = Double.Parse(linedata[9])
+                        TCH = Double.Parse(linedata[9]),
+                        Distance = Double.Parse(linedata[10])
                     });
                 }
             }

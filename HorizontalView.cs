@@ -115,7 +115,8 @@ namespace AuroraPAR
             canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
+                //TODO: remove debug
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n{(aircraft.LateralOffset(_runway) - _runway.Heading + 360) % 360}°={aircraft.LateralOffset(_runway)}nm",
                 FontSize = 12,
                 Foreground = Brushes.White
             };

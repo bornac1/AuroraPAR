@@ -93,7 +93,7 @@ namespace AuroraPAR
             Line glidepath = new()
             {
                 X1 = _runway.LengthNM * xscale,
-                Y1 = canvas.ActualHeight - (50*yscale + 20),
+                Y1 = canvas.ActualHeight - (_runway.TCH * yscale + 20),
                 X2 = (_runway.Distance + _runway.LengthNM) * xscale,
                 Y2 = canvas.ActualHeight-((_runway.Distance * Math.Tan(_runway.GlideSlope * double.Pi / 180) * 6076.11549)*yscale + 20),
                 Stroke = Brushes.Yellow,
@@ -103,7 +103,7 @@ namespace AuroraPAR
             Line glidepathM05 = new()
             {
                 X1 = _runway.LengthNM * xscale,
-                Y1 = canvas.ActualHeight - (50 * yscale + 20),
+                Y1 = canvas.ActualHeight - (_runway.TCH * yscale + 20),
                 X2 = (_runway.Distance + _runway.LengthNM) * xscale,
                 Y2 = canvas.ActualHeight - ((_runway.Distance * Math.Tan((_runway.GlideSlope-0.5) * double.Pi / 180) * 6076.11549) * yscale + 20),
                 Stroke = Brushes.Red,
@@ -113,7 +113,7 @@ namespace AuroraPAR
             Line glidepathP05 = new()
             {
                 X1 = _runway.LengthNM * xscale,
-                Y1 = canvas.ActualHeight - (50 * yscale + 20),
+                Y1 = canvas.ActualHeight - (_runway.TCH * yscale + 20),
                 X2 = (_runway.Distance + _runway.LengthNM) * xscale,
                 Y2 = canvas.ActualHeight - ((_runway.Distance * Math.Tan((_runway.GlideSlope + 0.5) * double.Pi / 180) * 6076.11549) * yscale + 20),
                 Stroke = Brushes.Red,
