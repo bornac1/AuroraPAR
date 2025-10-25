@@ -22,8 +22,8 @@ namespace AuroraPAR
         }
         private void CalculateScale()
         {
-            xscale = canvas.ActualWidth / (1.1 * _runway.Distance + 2);
-            yscale = (canvas.ActualHeight - 0) / ((1.1 * _runway.Distance) + 2);
+            xscale = (canvas.ActualWidth - 50) / (_runway.Distance+_runway.LengthNM);
+            yscale = (canvas.ActualHeight - 50) / (_runway.Distance+Runway.LengthNM);
         }
         public void Draw(List<Aircraft> aircrafts)
         {
