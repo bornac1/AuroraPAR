@@ -95,7 +95,7 @@ namespace AuroraPAR
                 X1 = _runway.LengthNM * xscale,
                 Y1 = canvas.ActualHeight - (_runway.TCH * yscale + 20),
                 X2 = (_runway.Distance + _runway.LengthNM) * xscale,
-                Y2 = canvas.ActualHeight-((_runway.Distance * Math.Tan(_runway.GlideSlope * double.Pi / 180) * 6076.11549)*yscale + 20),
+                Y2 = canvas.ActualHeight-((_runway.Distance * Math.Tan(_runway.GlideSlope * double.Pi / 180) * 6076.11549 + _runway.TCH)*yscale + 20),
                 Stroke = Brushes.Yellow,
                 StrokeThickness = 2
             };
@@ -105,7 +105,7 @@ namespace AuroraPAR
                 X1 = _runway.LengthNM * xscale,
                 Y1 = canvas.ActualHeight - (_runway.TCH * yscale + 20),
                 X2 = (_runway.Distance + _runway.LengthNM) * xscale,
-                Y2 = canvas.ActualHeight - ((_runway.Distance * Math.Tan((_runway.GlideSlope-0.5) * double.Pi / 180) * 6076.11549) * yscale + 20),
+                Y2 = canvas.ActualHeight - ((_runway.Distance * Math.Tan((_runway.GlideSlope-0.5) * double.Pi / 180) * 6076.11549 + _runway.TCH) * yscale + 20),
                 Stroke = Brushes.Red,
                 StrokeThickness = 2
             };
@@ -115,7 +115,7 @@ namespace AuroraPAR
                 X1 = _runway.LengthNM * xscale,
                 Y1 = canvas.ActualHeight - (_runway.TCH * yscale + 20),
                 X2 = (_runway.Distance + _runway.LengthNM) * xscale,
-                Y2 = canvas.ActualHeight - ((_runway.Distance * Math.Tan((_runway.GlideSlope + 0.5) * double.Pi / 180) * 6076.11549) * yscale + 20),
+                Y2 = canvas.ActualHeight - ((_runway.Distance * Math.Tan((_runway.GlideSlope + 0.5) * double.Pi / 180) * 6076.11549 + _runway.TCH) * yscale + 20),
                 Stroke = Brushes.Red,
                 StrokeThickness = 2
             };
