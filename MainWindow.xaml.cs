@@ -12,7 +12,7 @@ namespace AuroraPAR
         private ProfileView profileView;
         private HorizontalView horizontalView;
         private readonly Aurora aurora;
-        private readonly Distance[] distances = new Distance[] {5, 10, 15, 20};
+        private readonly Distance[] distances = new Distance[] {1, 2.5, 5, 10, 15, 20};
         private string dataPath = "runways.par";
         private Runway runway = new()
         {

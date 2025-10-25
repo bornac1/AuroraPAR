@@ -143,6 +143,7 @@ namespace AuroraPAR
         double distance = distance;
         public static implicit operator double(Distance d) => d.distance;
         public static implicit operator Distance(int distance) => new Distance(distance);
+        public static implicit operator Distance(double distance) => new Distance(distance);
         public override string ToString()
         {
             return $"{distance} nm";
