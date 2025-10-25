@@ -123,7 +123,7 @@ namespace AuroraPAR
             double y = Math.Sin(dLon) * Math.Cos(lat2Rad);
             double x = Math.Cos(lat1Rad) * Math.Sin(lat2Rad) -
                        Math.Sin(lat1Rad) * Math.Cos(lat2Rad) * Math.Cos(dLon);
-            double bearingToAircraft = Math.Atan2(y, x) * (180 / Math.PI); // Convert to degrees
+            double bearingToAircraft = (Math.Atan2(y, x) * 180 / Math.PI + 360) % 360;
             return bearingToAircraft;
         }
         public bool IsDisplayed(Runway runway)
