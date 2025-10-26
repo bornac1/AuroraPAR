@@ -29,8 +29,8 @@ namespace AuroraPAR
                 Stroke = Brushes.White,
                 Fill = Brushes.White
             };
-            Canvas.SetBottom(elipse, aircraft.Altitude * yscale);
-            Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale);
+            Canvas.SetBottom(elipse, aircraft.Altitude * yscale + 2.5);
+            Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
@@ -38,8 +38,8 @@ namespace AuroraPAR
                 FontSize = 12,
                 Foreground = Brushes.White
             };
-            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 15));
-            Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale)-10);
+            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 17.5));
+            Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale)-15);
             Canvas.Children.Add(textBlock);
         }
         public void Draw(List<Aircraft> aircrafts)

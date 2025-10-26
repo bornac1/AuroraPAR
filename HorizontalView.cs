@@ -105,10 +105,10 @@ namespace AuroraPAR
                 Stroke = Brushes.White,
                 Fill = Brushes.White
             };
-            double top = (Canvas.ActualHeight / 2) - aircraft.LateralOffset(Runway) * yscale;
+            double top = (Canvas.ActualHeight / 2) - aircraft.LateralOffset(Runway) * yscale - 5;
             if (top < 0) return;
             Canvas.SetTop(elipse, top);
-            Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale);
+            Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
@@ -117,8 +117,8 @@ namespace AuroraPAR
                 FontSize = 12,
                 Foreground = Brushes.White
             };
-            Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2)-(aircraft.LateralOffset(Runway) * yscale + 35));
-            Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale) - 10);
+            Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2)-(aircraft.LateralOffset(Runway) * yscale + 35) - 5);
+            Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale) - 15);
             Canvas.Children.Add(textBlock);
         }
     }
