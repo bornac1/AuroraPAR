@@ -113,7 +113,7 @@ namespace AuroraPAR
             TextBlock textBlock = new()
             {
                 //TODO: remove debug
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{(aircraft.BearingFromRunway(Runway) - Runway.Heading + 360) % 360}°={aircraft.LateralOffset(Runway)}nm",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{aircraft.BearingFromRunway(Runway)}°={aircraft.LateralOffset(Runway)}nm",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
