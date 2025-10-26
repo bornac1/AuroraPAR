@@ -13,17 +13,12 @@ namespace AuroraPAR
     {
         private double xscale = 1;
         private double yscale = 1;
-        Canvas canvas = canvas;
-        Runway _runway = runway;
-        public Runway Runway
-        {
-            get { return _runway; }
-            set { _runway = value; }
-        }
+        Canvas Canvas = canvas;
+        private Runway Runway = runway;
         private void CalculateScale()
         {
-            xscale = (canvas.ActualWidth - 50) / (_runway.Distance+_runway.LengthNM);
-            yscale = (canvas.ActualHeight - 50) / (_runway.Distance+Runway.LengthNM);
+            xscale = (Canvas.ActualWidth - 50) / (Runway.Distance+Runway.LengthNM);
+            yscale = (Canvas.ActualHeight - 50) / (Runway.Distance+Runway.LengthNM);
         }
         public void Draw(List<Aircraft> aircrafts)
         {
@@ -31,71 +26,71 @@ namespace AuroraPAR
             Line runwayh = new()
             {
                 X1 = 0,
-                Y1 = canvas.ActualHeight / 2,
-                X2 = _runway.LengthNM * xscale,
-                Y2 = canvas.ActualHeight / 2,
+                Y1 = Canvas.ActualHeight / 2,
+                X2 = Runway.LengthNM * xscale,
+                Y2 = Canvas.ActualHeight / 2,
                 Stroke = Brushes.Green,
                 StrokeThickness = 3
             };
-            canvas.Children.Add(runwayh);
+            Canvas.Children.Add(runwayh);
             Line runwayv = new()
             {
-                X1 = _runway.LengthNM * xscale,
-                Y1 = (canvas.ActualHeight / 2) - (_runway.WidthNM * yscale),
-                X2 = _runway.LengthNM * xscale,
-                Y2 = (canvas.ActualHeight / 2) + (_runway.WidthNM * yscale),
+                X1 = Runway.LengthNM * xscale,
+                Y1 = (Canvas.ActualHeight / 2) - (Runway.WidthNM * yscale),
+                X2 = Runway.LengthNM * xscale,
+                Y2 = (Canvas.ActualHeight / 2) + (Runway.WidthNM * yscale),
                 Stroke = Brushes.Green,
                 StrokeThickness = 3
             };
-            canvas.Children.Add(runwayv);
+            Canvas.Children.Add(runwayv);
             Line upper = new()
             {
                 X1 = 0,
-                Y1 = canvas.ActualHeight / 2,
-                X2 = (_runway.LengthNM + Runway.Distance) * xscale,
-                Y2 = canvas.ActualHeight - (((_runway.LengthNM + _runway.Distance) * Math.Tan((10) * double.Pi / 180)) * yscale),
+                Y1 = Canvas.ActualHeight / 2,
+                X2 = (Runway.LengthNM + Runway.Distance) * xscale,
+                Y2 = Canvas.ActualHeight - (((Runway.LengthNM + Runway.Distance) * Math.Tan((10) * double.Pi / 180)) * yscale),
                 Stroke = Brushes.CadetBlue,
                 StrokeThickness = 3
             };
-            canvas.Children.Add(upper);
+            Canvas.Children.Add(upper);
             Line lower = new()
             {
                 X1 = 0,
-                Y1 = canvas.ActualHeight / 2,
-                X2 = (_runway.LengthNM + Runway.Distance) * xscale,
-                Y2 = ((_runway.LengthNM + _runway.Distance) * Math.Tan((10) * double.Pi / 180)) * yscale,
+                Y1 = Canvas.ActualHeight / 2,
+                X2 = (Runway.LengthNM + Runway.Distance) * xscale,
+                Y2 = ((Runway.LengthNM + Runway.Distance) * Math.Tan((10) * double.Pi / 180)) * yscale,
                 Stroke = Brushes.CadetBlue,
                 StrokeThickness = 3
             };
-            canvas.Children.Add(lower);
+            Canvas.Children.Add(lower);
             Line axis = new()
             {
-                X1 = _runway.LengthNM * xscale,
-                Y1 = canvas.ActualHeight / 2,
-                X2 = (_runway.LengthNM + Runway.Distance) * xscale,
-                Y2 = canvas.ActualHeight / 2,
+                X1 = Runway.LengthNM * xscale,
+                Y1 = Canvas.ActualHeight / 2,
+                X2 = (Runway.LengthNM + Runway.Distance) * xscale,
+                Y2 = Canvas.ActualHeight / 2,
                 Stroke = Brushes.Yellow,
                 StrokeThickness = 2
             };
-            canvas.Children.Add(axis);
+            Canvas.Children.Add(axis);
             for (int i = 1; i <= 10; i++)
             {
                 SolidColorBrush stroke = (i % 5 == 0) ? Brushes.Orange : Brushes.Green;
-                double x = (i * _runway.Distance / 10 + _runway.LengthNM) * xscale;
+                double x = (i * Runway.Distance / 10 + Runway.LengthNM) * xscale;
                 Line distance = new()
                 {
                     X1 = x,
-                    Y1 = canvas.ActualHeight / 2 + (x / ((_runway.LengthNM + _runway.Distance) * xscale) * (((_runway.LengthNM + _runway.Distance) * Math.Tan(10 * Math.PI / 180)) * yscale - canvas.ActualHeight / 2)),
+                    Y1 = Canvas.ActualHeight / 2 + (x / ((Runway.LengthNM + Runway.Distance) * xscale) * (((Runway.LengthNM + Runway.Distance) * Math.Tan(10 * Math.PI / 180)) * yscale - Canvas.ActualHeight / 2)),
                     X2 = x,
-                    Y2 = canvas.ActualHeight / 2 + (x / ((_runway.LengthNM + _runway.Distance) * xscale) * (canvas.ActualHeight - (((_runway.LengthNM + _runway.Distance) * Math.Tan(10 * Math.PI / 180)) * yscale) - canvas.ActualHeight / 2)),
+                    Y2 = Canvas.ActualHeight / 2 + (x / ((Runway.LengthNM + Runway.Distance) * xscale) * (Canvas.ActualHeight - (((Runway.LengthNM + Runway.Distance) * Math.Tan(10 * Math.PI / 180)) * yscale) - Canvas.ActualHeight / 2)),
                     Stroke = stroke,
                     StrokeThickness = 1
                 };
-                canvas.Children.Add(distance);
+                Canvas.Children.Add(distance);
             }
             foreach (Aircraft aircraft in aircrafts)
             {
-                if (aircraft.IsDisplayed(runway))
+                if (aircraft.IsDisplayed(Runway))
                 {
                     DrawAircraft(aircraft);
                 }
@@ -110,21 +105,21 @@ namespace AuroraPAR
                 Stroke = Brushes.White,
                 Fill = Brushes.White
             };
-            double top = (canvas.ActualHeight / 2) - aircraft.LateralOffset(_runway) * yscale;
+            double top = (Canvas.ActualHeight / 2) - aircraft.LateralOffset(Runway) * yscale;
             if (top < 0) return;
             Canvas.SetTop(elipse, top);
-            Canvas.SetLeft(elipse, (aircraft.Distance(_runway) + _runway.LengthNM) * xscale);
-            canvas.Children.Add(elipse);
+            Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale);
+            Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
                 //TODO: remove debug
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{(aircraft.BearingFromRunway(_runway) - _runway.Heading + 360) % 360}°={aircraft.LateralOffset(_runway)}nm",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{(aircraft.BearingFromRunway(Runway) - Runway.Heading + 360) % 360}°={aircraft.LateralOffset(Runway)}nm",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
-            Canvas.SetTop(textBlock, (canvas.ActualHeight / 2)-(aircraft.LateralOffset(runway) * yscale + 35));
-            Canvas.SetLeft(textBlock, ((aircraft.Distance(_runway) + _runway.LengthNM) * xscale) - 10);
-            canvas.Children.Add(textBlock);
+            Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2)-(aircraft.LateralOffset(Runway) * yscale + 35));
+            Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale) - 10);
+            Canvas.Children.Add(textBlock);
         }
     }
 }
