@@ -29,7 +29,7 @@ namespace AuroraPAR
                 Stroke = Brushes.White,
                 Fill = Brushes.White
             };
-            Canvas.SetBottom(elipse, aircraft.Altitude * yscale + 2.5);
+            Canvas.SetBottom(elipse, (aircraft.Altitude-Runway.Elevation) * yscale + 2.5);
             Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
