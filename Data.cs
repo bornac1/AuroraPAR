@@ -128,9 +128,9 @@ namespace AuroraPAR
         }
         public bool IsDisplayed(Runway runway)
         {
-            double diff = BearingFromRunway(runway);
+            double diff = BearingFromRunway(runway) - 180;
             //Prevent opposite runway
-            if (Math.Abs(diff) <= 90) return false;
+            if (Math.Abs(diff) <= 10) return false;
             //Prevent far away aircrafts
             if (Distance(runway) > runway.Distance) return false;
             //Prevent aircrafts below runway elevation
