@@ -115,6 +115,26 @@ namespace AuroraPAR
                 StrokeThickness = 2
             };
             Canvas.Children.Add(glidepathP05);
+            Line MDH = new()
+            {
+                X1 = 0,
+                Y1 = Canvas.ActualHeight - (Runway.MDH * yscale + 20),
+                X2 = (Runway.LengthNM + ((Runway.MDH - Runway.TCH) / 6076.11549) / Math.Tan(Runway.GlideSlope * double.Pi / 180)) * xscale,
+                Y2 = Canvas.ActualHeight - (Runway.MDH * yscale + 20),
+                Stroke = Brushes.Red,
+                StrokeThickness = 2
+            };
+            Canvas.Children.Add(MDH);
+            Line MAPt = new()
+            {
+                X1 = (Runway.LengthNM + ((Runway.MDH - Runway.TCH) / 6076.11549) / Math.Tan(Runway.GlideSlope * double.Pi / 180)) * xscale,
+                Y1 = Canvas.ActualHeight - 20,
+                X2 = (Runway.LengthNM + ((Runway.MDH - Runway.TCH) / 6076.11549) / Math.Tan(Runway.GlideSlope * double.Pi / 180)) * xscale,
+                Y2 = Canvas.ActualHeight - (Runway.MDH * yscale + 20),
+                Stroke = Brushes.Red,
+                StrokeThickness = 2
+            };
+            Canvas.Children.Add(MAPt);
             for (int i = 1; i<=10; i++)
             {
                 SolidColorBrush stroke;
