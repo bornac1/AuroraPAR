@@ -45,6 +45,10 @@ namespace AuroraPAR
         /// </summary>
         public double TCH { get; set; } = 50;
         /// <summary>
+        /// Minimum descend height.
+        /// </summary>
+        public double MDH { get; set; } = 200;
+        /// <summary>
         /// Distance from the runway to be displayed in NM.
         /// </summary>
         public double Distance { get; set; } = 10.0;
@@ -128,9 +132,9 @@ namespace AuroraPAR
         }
         public bool IsDisplayed(Runway runway)
         {
-            double diff = (BearingFromRunway(runway) - runway.Heading + 360) % 360;
+            double diff = BearingFromRunway(runway) - runway.Heading - 180;
             //Prevent opposite runway
-            if (Math.Abs(diff) <= 90) return false;
+            if (Math.Abs(diff) >= 10) return false;
             //Prevent far away aircrafts
             if (Distance(runway) > runway.Distance) return false;
             //Prevent aircrafts below runway elevation
@@ -152,7 +156,7 @@ namespace AuroraPAR
 
     internal class DataFile
     {
-        //Format: ICAO;DESIGNATOR;HEADING;ELEVATION;LATITUDE;LONGITUDE;LENGTH IN METERS;WIDTH IN METERS;GLIDE SLOPE;TCH;DEFAULT DISTANCE
+        //Format: ICAO;DESIGNATOR;HEADING;ELEVATION;LATITUDE;LONGITUDE;LENGTH IN METERS;WIDTH IN METERS;GLIDE SLOPE;TCH;MDH;DEFAULT DISTANCE
         public static async Task<Runway[]> GetRunways(string path)
         {
             List<Runway> runways = [];
@@ -174,7 +178,8 @@ namespace AuroraPAR
                         WidthM = Double.Parse(linedata[7]),
                         GlideSlope = Double.Parse(linedata[8]),
                         TCH = Double.Parse(linedata[9]),
-                        Distance = Double.Parse(linedata[10])
+                        MDH = Double.Parse(linedata[10]),
+                        Distance = Double.Parse(linedata[11])
                     });
                 }
             }
