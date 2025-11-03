@@ -35,7 +35,7 @@ namespace AuroraPAR
             double calculatedAlt = aircraft.Distance(Runway) * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH;
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{aircraft.Altitude - calculatedAlt} ft",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{aircraft.Altitude - Runway.Elevation - calculatedAlt} ft",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
