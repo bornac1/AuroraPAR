@@ -134,7 +134,7 @@ namespace AuroraPAR
         {
             double diff = BearingFromRunway(runway) - runway.Heading - 180;
             //Prevent opposite runway
-            if (Math.Abs(diff) >= 10) return false;
+            //if (Math.Abs(diff) >= 10) return false;
             //Prevent far away aircrafts
             if (Distance(runway) > runway.Distance) return false;
             //Prevent aircrafts below runway elevation
@@ -164,7 +164,7 @@ namespace AuroraPAR
             foreach (string line in data)
             {
                 string[] linedata = line.Replace('.', ',').Split(';');
-                if (linedata.Length > 9)
+                if (linedata.Length > 10)
                 {
                     runways.Add(new()
                     {
