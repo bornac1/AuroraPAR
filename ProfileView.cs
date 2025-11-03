@@ -32,9 +32,10 @@ namespace AuroraPAR
             Canvas.SetBottom(elipse, (aircraft.Altitude-Runway.Elevation) * yscale + 2.5);
             Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
+            double calculatedAlt = aircraft.Distance(Runway) * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH;
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{aircraft.Altitude - calculatedAlt} ft",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
