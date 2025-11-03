@@ -18,7 +18,7 @@ namespace AuroraPAR
         private void CalculateScale()
         {
             xscale = (Canvas.ActualWidth - 50) / (Runway.Distance+Runway.LengthNM);
-            yscale = (Canvas.ActualHeight - 50) / (((Runway.Distance+Runway.LengthNM) * Math.Tan((Runway.GlideSlope + 5) * double.Pi / 180)* 6076.11549)+2);
+            yscale = (Canvas.ActualHeight - 50) / (((Runway.Distance+Runway.LengthNM) * Math.Tan((Runway.GlideSlope + 5) * double.Pi / 180)* 6076.11549));
         }
         private void DrawAircraft(Aircraft aircraft)
         {
@@ -29,18 +29,41 @@ namespace AuroraPAR
                 Stroke = Brushes.White,
                 Fill = Brushes.White
             };
-            Canvas.SetBottom(elipse, (aircraft.Altitude-Runway.Elevation) * yscale + 2.5);
+            Canvas.SetBottom(elipse, (aircraft.Altitude-Runway.Elevation) * yscale - 5);
             Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
             double calculatedAlt = aircraft.Distance(Runway) * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH;
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{aircraft.Altitude - Runway.Elevation - calculatedAlt} ft",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n{aircraft.Altitude - Runway.Elevation - calculatedAlt} ft",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
-            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 17.5));
+            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 15));
             Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale)-15);
+            Canvas.Children.Add(textBlock);
+        }
+        private void DrawAircraft(double distance, double altitude)
+        {
+            Ellipse elipse = new()
+            {
+                Height = 10,
+                Width = 10,
+                Stroke = Brushes.White,
+                Fill = Brushes.White
+            };
+            Canvas.SetBottom(elipse, (altitude - Runway.Elevation) * yscale - 5);
+            Canvas.SetLeft(elipse, (distance + Runway.LengthNM) * xscale - 5);
+            Canvas.Children.Add(elipse);
+            double calculatedAlt = distance * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH;
+            TextBlock textBlock = new()
+            {
+                Text = $"test1\n{altitude}\n{altitude - Runway.Elevation - calculatedAlt} ft",
+                FontSize = 12,
+                Foreground = Brushes.White
+            };
+            Canvas.SetBottom(textBlock, ((altitude - Runway.Elevation) * yscale) + 15);
+            Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale) - 15);
             Canvas.Children.Add(textBlock);
         }
         public void Draw(List<Aircraft> aircrafts)
@@ -49,9 +72,9 @@ namespace AuroraPAR
             Line horizontal = new()
             {
                 X1 = Runway.LengthNM*xscale,
-                Y1 = Canvas.ActualHeight - 20,
+                Y1 = Canvas.ActualHeight,
                 X2 = (Runway.Distance+Runway.LengthNM) * xscale,
-                Y2 = Canvas.ActualHeight - 20,
+                Y2 = Canvas.ActualHeight,
                 Stroke = Brushes.Green,
                 StrokeThickness = 2
             };
@@ -59,9 +82,9 @@ namespace AuroraPAR
             Line runwayh = new()
             {
                 X1 = 0,
-                Y1 = Canvas.ActualHeight - 20,
+                Y1 = Canvas.ActualHeight,
                 X2 = Runway.LengthNM * xscale,
-                Y2 = Canvas.ActualHeight - 20,
+                Y2 = Canvas.ActualHeight,
                 Stroke = Brushes.Green,
                 StrokeThickness = 3
             };
@@ -69,9 +92,9 @@ namespace AuroraPAR
             Line runwayv = new()
             {
                 X1 = Runway.LengthNM * xscale,
-                Y1 = Canvas.ActualHeight - 20,
+                Y1 = Canvas.ActualHeight,
                 X2 = Runway.LengthNM * xscale,
-                Y2 = Canvas.ActualHeight - ((Runway.LengthNM * Math.Tan((Runway.GlideSlope + 5) * double.Pi / 180) * 6076.11549) * yscale + 20),
+                Y2 = Canvas.ActualHeight - ((Runway.LengthNM * Math.Tan((Runway.GlideSlope + 5) * double.Pi / 180) * 6076.11549) * yscale),
                 Stroke = Brushes.Green,
                 StrokeThickness = 3
             };
@@ -79,9 +102,9 @@ namespace AuroraPAR
             Line upper = new()
             {
                 X1 = 0,
-                Y1 = Canvas.ActualHeight - 20,
+                Y1 = Canvas.ActualHeight,
                 X2 = (Runway.LengthNM+Runway.Distance) * xscale,
-                Y2 = Canvas.ActualHeight - (((Runway.LengthNM+Runway.Distance) * Math.Tan((Runway.GlideSlope + 5) * double.Pi / 180) * 6076.11549) * yscale + 20),
+                Y2 = Canvas.ActualHeight - (((Runway.LengthNM+Runway.Distance) * Math.Tan((Runway.GlideSlope + 5) * double.Pi / 180) * 6076.11549) * yscale),
                 Stroke = Brushes.CadetBlue,
                 StrokeThickness = 3
             };
@@ -89,9 +112,9 @@ namespace AuroraPAR
             Line glidepath = new()
             {
                 X1 = Runway.LengthNM * xscale,
-                Y1 = Canvas.ActualHeight - (Runway.TCH * yscale + 20),
+                Y1 = Canvas.ActualHeight - (Runway.TCH * yscale),
                 X2 = (Runway.Distance + Runway.LengthNM) * xscale,
-                Y2 = Canvas.ActualHeight-((Runway.Distance * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH)*yscale + 20),
+                Y2 = Canvas.ActualHeight-((Runway.Distance * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH)*yscale),
                 Stroke = Brushes.Yellow,
                 StrokeThickness = 2
             };
@@ -99,9 +122,9 @@ namespace AuroraPAR
             Line glidepathM05 = new()
             {
                 X1 = Runway.LengthNM * xscale,
-                Y1 = Canvas.ActualHeight - (Runway.TCH * yscale + 20),
+                Y1 = Canvas.ActualHeight - (Runway.TCH * yscale),
                 X2 = (Runway.Distance + Runway.LengthNM) * xscale,
-                Y2 = Canvas.ActualHeight - ((Runway.Distance * Math.Tan((Runway.GlideSlope-0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH) * yscale + 20),
+                Y2 = Canvas.ActualHeight - ((Runway.Distance * Math.Tan((Runway.GlideSlope-0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH) * yscale),
                 Stroke = Brushes.Red,
                 StrokeThickness = 2
             };
@@ -109,9 +132,9 @@ namespace AuroraPAR
             Line glidepathP05 = new()
             {
                 X1 = Runway.LengthNM * xscale,
-                Y1 = Canvas.ActualHeight - (Runway.TCH * yscale + 20),
+                Y1 = Canvas.ActualHeight - (Runway.TCH * yscale),
                 X2 = (Runway.Distance + Runway.LengthNM) * xscale,
-                Y2 = Canvas.ActualHeight - ((Runway.Distance * Math.Tan((Runway.GlideSlope + 0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH) * yscale + 20),
+                Y2 = Canvas.ActualHeight - ((Runway.Distance * Math.Tan((Runway.GlideSlope + 0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH) * yscale),
                 Stroke = Brushes.Red,
                 StrokeThickness = 2
             };
@@ -119,9 +142,9 @@ namespace AuroraPAR
             Line MDH = new()
             {
                 X1 = 0,
-                Y1 = Canvas.ActualHeight - (Runway.MDH * yscale + 20),
+                Y1 = Canvas.ActualHeight - (Runway.MDH * yscale),
                 X2 = (Runway.LengthNM + ((Runway.MDH - Runway.TCH) / 6076.11549) / Math.Tan(Runway.GlideSlope * double.Pi / 180)) * xscale,
-                Y2 = Canvas.ActualHeight - (Runway.MDH * yscale + 20),
+                Y2 = Canvas.ActualHeight - (Runway.MDH * yscale),
                 Stroke = Brushes.Red,
                 StrokeThickness = 2
             };
@@ -129,9 +152,9 @@ namespace AuroraPAR
             Line MAPt = new()
             {
                 X1 = (Runway.LengthNM + ((Runway.MDH - Runway.TCH) / 6076.11549) / Math.Tan(Runway.GlideSlope * double.Pi / 180)) * xscale,
-                Y1 = Canvas.ActualHeight - 20,
+                Y1 = Canvas.ActualHeight,
                 X2 = (Runway.LengthNM + ((Runway.MDH - Runway.TCH) / 6076.11549) / Math.Tan(Runway.GlideSlope * double.Pi / 180)) * xscale,
-                Y2 = Canvas.ActualHeight - (Runway.MDH * yscale + 20),
+                Y2 = Canvas.ActualHeight - (Runway.MDH * yscale),
                 Stroke = Brushes.Red,
                 StrokeThickness = 2
             };
@@ -149,9 +172,9 @@ namespace AuroraPAR
                 Line distance = new()
                 {
                     X1 = (i*Runway.Distance/10+Runway.LengthNM)*xscale,
-                    Y1 = Canvas.ActualHeight-20,
+                    Y1 = Canvas.ActualHeight,
                     X2 = (i*Runway.Distance/10 + Runway.LengthNM) * xscale,
-                    Y2 = Canvas.ActualHeight - (((Runway.LengthNM+i*Runway.Distance/10) * Math.Tan((Runway.GlideSlope+5) * double.Pi / 180) * 6076.11549) * yscale + 20),
+                    Y2 = Canvas.ActualHeight - (((Runway.LengthNM+i*Runway.Distance/10) * Math.Tan((Runway.GlideSlope+5) * double.Pi / 180) * 6076.11549) * yscale),
                     Stroke = stroke,
                     StrokeThickness = 1
                 };
