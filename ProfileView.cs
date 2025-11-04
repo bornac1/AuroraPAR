@@ -159,7 +159,12 @@ namespace AuroraPAR
                 StrokeThickness = 2
             };
             Canvas.Children.Add(MAPt);
-            for (int i = 1; i<=10; i++)
+            int num = 10;
+            if(Runway.Distance == 15)
+            {
+                num = 15;
+            }
+            for (int i = 1; i <= num; i++)
             {
                 SolidColorBrush stroke;
                 if (i % 5 == 0)
@@ -171,22 +176,22 @@ namespace AuroraPAR
                 }
                 Line distance = new()
                 {
-                    X1 = (i*Runway.Distance/10+Runway.LengthNM)*xscale,
+                    X1 = (i*Runway.Distance/num+Runway.LengthNM)*xscale,
                     Y1 = Canvas.ActualHeight,
-                    X2 = (i*Runway.Distance/10 + Runway.LengthNM) * xscale,
-                    Y2 = Canvas.ActualHeight - (((Runway.LengthNM+i*Runway.Distance/10) * Math.Tan((Runway.GlideSlope+5) * double.Pi / 180) * 6076.11549) * yscale),
+                    X2 = (i*Runway.Distance/num + Runway.LengthNM) * xscale,
+                    Y2 = Canvas.ActualHeight - (((Runway.LengthNM+i*Runway.Distance/num) * Math.Tan((Runway.GlideSlope+5) * double.Pi / 180) * 6076.11549) * yscale),
                     Stroke = stroke,
                     StrokeThickness = 1
                 };
                 Canvas.Children.Add(distance);
                 TextBlock textBlock = new()
                 {
-                    Text = $"{i*Runway.Distance/10}NM",
+                    Text = $"{i*Runway.Distance/num}NM",
                     FontSize = 12,
                     Foreground = Brushes.Yellow
                 };
                 Canvas.SetBottom(textBlock, 0);
-                Canvas.SetLeft(textBlock, ((i * Runway.Distance / 10 + Runway.LengthNM) * xscale-10));
+                Canvas.SetLeft(textBlock, ((i * Runway.Distance / num + Runway.LengthNM) * xscale-10));
                 Canvas.Children.Add(textBlock);
             }
             foreach (Aircraft aircraft in aircrafts)

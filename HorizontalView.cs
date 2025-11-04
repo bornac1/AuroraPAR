@@ -93,10 +93,15 @@ namespace AuroraPAR
                 StrokeThickness = 2
             };
             Canvas.Children.Add(axisM15);
-            for (int i = 1; i <= 10; i++)
+            int num = 10;
+            if (Runway.Distance == 15)
+            {
+                num = 15;
+            }
+            for (int i = 1; i <= num; i++)
             {
                 SolidColorBrush stroke = (i % 5 == 0) ? Brushes.Orange : Brushes.Green;
-                double x = (i * Runway.Distance / 10.0 + Runway.LengthNM) * xscale;
+                double x = (i * Runway.Distance / num + Runway.LengthNM) * xscale;
 
                 Line distance = new()
                 {
