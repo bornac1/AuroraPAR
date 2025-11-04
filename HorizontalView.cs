@@ -139,7 +139,7 @@ namespace AuroraPAR
             Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n\n{(aircraft.BearingFromRunway(runway) - runway.Heading + 360) % 360 - 180}°",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
