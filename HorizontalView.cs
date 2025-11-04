@@ -125,26 +125,36 @@ namespace AuroraPAR
         }
         private void DrawAircraft(Aircraft aircraft)
         {
-            Ellipse elipse = new()
+            var color = Brushes.White;
+            double distance = aircraft.Distance(Runway);
+            double offset = aircraft.LateralOffset(Runway);
+            if(Math.Abs(offset) <= distance * Math.Tan((1.5) * double.Pi / 180))
             {
-                Height = 10,
-                Width = 10,
-                Stroke = Brushes.White,
-                Fill = Brushes.White
-            };
-            double top = (Canvas.ActualHeight / 2) - aircraft.LateralOffset(Runway) * yscale - 5;
+                color = Brushes.Green;
+            } else
+            {
+                color = Brushes.Red;
+            }
+                Ellipse elipse = new()
+                {
+                    Height = 10,
+                    Width = 10,
+                    Stroke = color,
+                    Fill = color
+                };
+            double top = (Canvas.ActualHeight / 2) - offset * yscale - 5;
             if (top < 0) return;
             Canvas.SetTop(elipse, top);
-            Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale - 5);
+            Canvas.SetLeft(elipse, (distance + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
                 Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
                 FontSize = 12,
-                Foreground = Brushes.White
+                Foreground = color
             };
-            Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2)-(aircraft.LateralOffset(Runway) * yscale + 35) - 5);
-            Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale) - 15);
+            Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2)-(offset * yscale + 35) - 5);
+            Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale) - 15);
             Canvas.Children.Add(textBlock);
         }
     }
