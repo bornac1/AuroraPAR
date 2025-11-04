@@ -22,48 +22,35 @@ namespace AuroraPAR
         }
         private void DrawAircraft(Aircraft aircraft)
         {
-            Ellipse elipse = new()
+            var color = Brushes.White;
+            double distance = aircraft.Distance(Runway);
+            double calculatedUp = distance * Math.Tan((Runway.GlideSlope+0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH + Runway.Elevation;
+            double calculatedDown = distance * Math.Tan((Runway.GlideSlope - 0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH + Runway.Elevation;
+            if(aircraft.Altitude < calculatedUp && aircraft.Altitude > calculatedDown)
             {
-                Height = 10,
-                Width = 10,
-                Stroke = Brushes.White,
-                Fill = Brushes.White
-            };
+                color = Brushes.Green;
+            } else
+            {
+                color = Brushes.Red;
+            }
+                Ellipse elipse = new()
+                {
+                    Height = 10,
+                    Width = 10,
+                    Stroke = color,
+                    Fill = color
+                };
             Canvas.SetBottom(elipse, (aircraft.Altitude-Runway.Elevation) * yscale - 5);
-            Canvas.SetLeft(elipse, (aircraft.Distance(Runway) + Runway.LengthNM) * xscale - 5);
-            Canvas.Children.Add(elipse);
-            double calculatedAlt = aircraft.Distance(Runway) * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH;
-            TextBlock textBlock = new()
-            {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}\n{aircraft.Altitude - Runway.Elevation - calculatedAlt} ft",
-                FontSize = 12,
-                Foreground = Brushes.White
-            };
-            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 15));
-            Canvas.SetLeft(textBlock, ((aircraft.Distance(Runway) + Runway.LengthNM) * xscale)-15);
-            Canvas.Children.Add(textBlock);
-        }
-        private void DrawAircraft(double distance, double altitude)
-        {
-            Ellipse elipse = new()
-            {
-                Height = 10,
-                Width = 10,
-                Stroke = Brushes.White,
-                Fill = Brushes.White
-            };
-            Canvas.SetBottom(elipse, (altitude - Runway.Elevation) * yscale - 5);
             Canvas.SetLeft(elipse, (distance + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
-            double calculatedAlt = distance * Math.Tan(Runway.GlideSlope * double.Pi / 180) * 6076.11549 + Runway.TCH;
             TextBlock textBlock = new()
             {
-                Text = $"test1\n{altitude}\n{altitude - Runway.Elevation - calculatedAlt} ft",
+                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
                 FontSize = 12,
-                Foreground = Brushes.White
+                Foreground = color
             };
-            Canvas.SetBottom(textBlock, ((altitude - Runway.Elevation) * yscale) + 15);
-            Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale) - 15);
+            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 15));
+            Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale)-15);
             Canvas.Children.Add(textBlock);
         }
         public void Draw(List<Aircraft> aircrafts)
