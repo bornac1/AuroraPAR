@@ -151,7 +151,7 @@ namespace AuroraPAR
             {
                 Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
                 FontSize = 12,
-                Foreground = color
+                Foreground = Brushes.White
             };
             Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2)-(offset * yscale + 35) - 5);
             Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale) - 15);
