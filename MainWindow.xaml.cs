@@ -62,12 +62,17 @@ namespace AuroraPAR
                 runway = r;
                 profileView = new(Vertical, runway);
                 horizontalView = new(Horizontal, runway);
+                int i = Array.IndexOf(distances, runway.Distance);
+                if(i != -1)
+                {
+                    DistanceComboBox.SelectedIndex = i;
+                }
             }
         }
 
         private void DistanceComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems[0] is Distance d)
+            if ( e.AddedItems.Count > 0 && e.AddedItems[0] is Distance d)
             {
                 runway.Distance = d;
             }
@@ -113,6 +118,23 @@ namespace AuroraPAR
             Canvas.SetLeft(info, 0);
             Canvas.SetTop(info, 0);
             Vertical.Children.Add(info);
+        }
+        private void Window_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            int i = DistanceComboBox.SelectedIndex;
+            if (e.Delta > 0)
+            {
+                if((i+1) < DistanceComboBox.Items.Count)
+                {
+                    DistanceComboBox.SelectedIndex = i + 1;
+                }
+            } else
+            {
+                if((i-1) >= 0)
+                {
+                    DistanceComboBox.SelectedIndex = i - 1;
+                }
+            }
         }
     }
 }
