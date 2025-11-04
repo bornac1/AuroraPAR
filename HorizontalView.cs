@@ -80,7 +80,7 @@ namespace AuroraPAR
                 X2 = (Runway.LengthNM + Runway.Distance) * xscale,
                 Y2 = (Canvas.ActualHeight / 2) + (Runway.Distance * Math.Tan((1.5) * double.Pi / 180)*yscale),
                 Stroke = Brushes.Red,
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             Canvas.Children.Add(axisP15);
             Line axisM15 = new()
@@ -90,7 +90,7 @@ namespace AuroraPAR
                 X2 = (Runway.LengthNM + Runway.Distance) * xscale,
                 Y2 = (Canvas.ActualHeight / 2) - (Runway.Distance * Math.Tan((1.5) * double.Pi / 180) * yscale),
                 Stroke = Brushes.Red,
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             Canvas.Children.Add(axisM15);
             int num = 10;

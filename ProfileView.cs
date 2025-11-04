@@ -113,7 +113,7 @@ namespace AuroraPAR
                 X2 = (Runway.Distance + Runway.LengthNM) * xscale,
                 Y2 = Canvas.ActualHeight - ((Runway.Distance * Math.Tan((Runway.GlideSlope-0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH) * yscale),
                 Stroke = Brushes.Red,
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             Canvas.Children.Add(glidepathM05);
             Line glidepathP05 = new()
@@ -123,7 +123,7 @@ namespace AuroraPAR
                 X2 = (Runway.Distance + Runway.LengthNM) * xscale,
                 Y2 = Canvas.ActualHeight - ((Runway.Distance * Math.Tan((Runway.GlideSlope + 0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH) * yscale),
                 Stroke = Brushes.Red,
-                StrokeThickness = 2
+                StrokeThickness = 1
             };
             Canvas.Children.Add(glidepathP05);
             Line MDH = new()
