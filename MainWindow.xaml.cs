@@ -36,7 +36,6 @@ namespace AuroraPAR
             profileView = new(Vertical, runway);
             horizontalView = new(Horizontal, runway);
             aurora = new();
-            this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
             timer = new();
             timer.Start();
