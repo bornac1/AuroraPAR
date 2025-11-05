@@ -15,11 +15,12 @@ namespace AuroraPAR
 {
     internal class Aurora
     {
-        private readonly TcpClient client = new();
+        private TcpClient client = new();
         private NetworkStream? stream;
         private StreamReader? reader;
         private StreamWriter? writer;
         private SemaphoreSlim semaphore = new(1, 1);
+        public bool Connected { get { return client.Connected; } }
         public async Task Connect()
         {
             try
@@ -32,6 +33,10 @@ namespace AuroraPAR
             } catch (Exception ex)
             {
                 //TODO: Exception handling
+                Close();
+                await Task.Delay(100);
+                client = new();
+                await Connect();
             }
         }
         public async Task<string[]> GetTrafficList()

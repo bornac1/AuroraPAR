@@ -14,6 +14,7 @@ namespace AuroraPAR
         private readonly Aurora aurora;
         private readonly Distance[] distances = new Distance[] {1, 2.5, 5, 10, 15, 20};
         private string dataPath = "runways.par";
+        private bool Open = true;
         private Runway runway = new()
         {
             ICAO = "EDDF",
@@ -45,6 +46,7 @@ namespace AuroraPAR
 
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
+            Open = false;
             aurora.Close();
         }
 
@@ -100,11 +102,14 @@ namespace AuroraPAR
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                Vertical.Children.Clear();
-                Horizontal.Children.Clear();
-                DrawInfo();
-                profileView.Draw(aircrafts);
-                horizontalView.Draw(aircrafts);
+                if (Open)
+                {
+                    Vertical.Children.Clear();
+                    Horizontal.Children.Clear();
+                    DrawInfo();
+                    profileView.Draw(aircrafts);
+                    horizontalView.Draw(aircrafts);
+                }
             });
         }
         private void DrawInfo()
@@ -118,6 +123,23 @@ namespace AuroraPAR
             Canvas.SetLeft(info, 0);
             Canvas.SetTop(info, 0);
             Vertical.Children.Add(info);
+            TextBlock sts = new()
+            {
+                FontSize = 14
+            };
+            if (aurora.Connected)
+            {
+                sts.Text = "STS OK";
+                sts.Foreground = Brushes.Green;
+            } else
+            {
+                sts.Text = "STS FAIL";
+                sts.Foreground = Brushes.Red;
+            }
+            Canvas.SetLeft(sts, 0);
+            info.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            Canvas.SetTop(sts, info.DesiredSize.Height);
+            Vertical.Children.Add(sts);
         }
         private void Window_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
