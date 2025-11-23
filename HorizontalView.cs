@@ -119,29 +119,28 @@ namespace AuroraPAR
             {
                 if (aircraft.IsDisplayed(Runway))
                 {
-                    DrawAircraft(aircraft);
+                    DrawAircraft(aircraft.Callsign, aircraft.Altitude, aircraft.Distance(runway), aircraft.LateralOffset(runway));
                 }
             }
         }
-        private void DrawAircraft(Aircraft aircraft)
+        private void DrawAircraft(string callsign, double altitude, double distance, double offset)
         {
             var color = Brushes.White;
-            double distance = aircraft.Distance(Runway);
-            double offset = aircraft.LateralOffset(Runway);
-            if(Math.Abs(offset) <= distance * Math.Tan((1.5) * double.Pi / 180))
+            if (Math.Abs(offset) <= distance * Math.Tan((1.5) * double.Pi / 180))
             {
                 color = Brushes.Green;
-            } else
+            }
+            else
             {
                 color = Brushes.Red;
             }
-                Ellipse elipse = new()
-                {
-                    Height = 10,
-                    Width = 10,
-                    Stroke = color,
-                    Fill = color
-                };
+            Ellipse elipse = new()
+            {
+                Height = 10,
+                Width = 10,
+                Stroke = color,
+                Fill = color
+            };
             double top = (Canvas.ActualHeight / 2) - offset * yscale - 5;
             if (top < 0) return;
             Canvas.SetTop(elipse, top);
@@ -149,11 +148,11 @@ namespace AuroraPAR
             Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
+                Text = $"{callsign}\n{altitude}",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
-            Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2)-(offset * yscale + 35) - 5);
+            Canvas.SetTop(textBlock, (Canvas.ActualHeight / 2) - (offset * yscale + 35) - 5);
             Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale) - 15);
             Canvas.Children.Add(textBlock);
         }

@@ -20,37 +20,37 @@ namespace AuroraPAR
             xscale = (Canvas.ActualWidth - 50) / (Runway.Distance+Runway.LengthNM);
             yscale = (Canvas.ActualHeight - 50) / (((Runway.Distance+Runway.LengthNM) * Math.Tan((Runway.GlideSlope + 5) * double.Pi / 180)* 6076.11549));
         }
-        private void DrawAircraft(Aircraft aircraft)
+        private void DrawAircraft(string callsign, double distance, double altitude)
         {
             var color = Brushes.White;
-            double distance = aircraft.Distance(Runway);
-            double calculatedUp = distance * Math.Tan((Runway.GlideSlope+0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH + Runway.Elevation;
+            double calculatedUp = distance * Math.Tan((Runway.GlideSlope + 0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH + Runway.Elevation;
             double calculatedDown = distance * Math.Tan((Runway.GlideSlope - 0.5) * double.Pi / 180) * 6076.11549 + Runway.TCH + Runway.Elevation;
-            if(aircraft.Altitude < calculatedUp && aircraft.Altitude > calculatedDown)
+            if (altitude < calculatedUp && altitude > calculatedDown)
             {
                 color = Brushes.Green;
-            } else
+            }
+            else
             {
                 color = Brushes.Red;
             }
-                Ellipse elipse = new()
-                {
-                    Height = 10,
-                    Width = 10,
-                    Stroke = color,
-                    Fill = color
-                };
-            Canvas.SetBottom(elipse, (aircraft.Altitude-Runway.Elevation) * yscale - 5);
+            Ellipse elipse = new()
+            {
+                Height = 10,
+                Width = 10,
+                Stroke = color,
+                Fill = color
+            };
+            Canvas.SetBottom(elipse, (altitude - Runway.Elevation) * yscale - 5);
             Canvas.SetLeft(elipse, (distance + Runway.LengthNM) * xscale - 5);
             Canvas.Children.Add(elipse);
             TextBlock textBlock = new()
             {
-                Text = $"{aircraft.Callsign}\n{aircraft.Altitude}",
+                Text = $"{callsign}\n{altitude}",
                 FontSize = 12,
                 Foreground = Brushes.White
             };
-            Canvas.SetBottom(textBlock, (aircraft.Altitude * yscale + 15));
-            Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale)-15);
+            Canvas.SetBottom(textBlock, (altitude * yscale + 15));
+            Canvas.SetLeft(textBlock, ((distance + Runway.LengthNM) * xscale) - 15);
             Canvas.Children.Add(textBlock);
         }
         public void Draw(List<Aircraft> aircrafts)
@@ -185,7 +185,7 @@ namespace AuroraPAR
             {
                 if (aircraft.IsDisplayed(runway))
                 {
-                    DrawAircraft(aircraft);
+                    DrawAircraft(aircraft.Callsign, aircraft.Distance(runway), aircraft.Altitude);
                 }
             }
         }
