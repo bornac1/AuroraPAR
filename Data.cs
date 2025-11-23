@@ -74,6 +74,8 @@ namespace AuroraPAR
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Altitude { get; set; } = 0;
+        public double Track { get; set; }
+        public double Speed { get; set; }
         /// <summary>
         /// Distance to runway.
         /// </summary>

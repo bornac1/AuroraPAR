@@ -73,7 +73,9 @@ namespace AuroraPAR
                         Aircraft aircraft = new Aircraft()
                         {
                             Callsign = callsign,
+                            Track = double.Parse(data[3]),
                             Altitude = double.Parse(data[4]),
+                            Speed = double.Parse(data[5]),
                             Latitude = double.Parse(data[6].Replace('.', ',')),
                             Longitude = double.Parse(data[7].Replace('.', ',')),
                         };
